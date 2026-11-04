@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Business of Food – Progress 1</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap');
+:root{--navy:#1c3052;--purple:#563b79;--orange:#f26b38;--lav:#f1ebfa;--blue:#eaf3fb;--ink:#263247;--muted:#68758a;--line:#e5e8ef}
+*{box-sizing:border-box}body{margin:0;background:#f6f7fb;color:var(--ink);font:16px/1.55 'DM Sans',system-ui,Arial,sans-serif}
+.hero{position:relative;overflow:hidden;background:linear-gradient(110deg,rgba(28,48,82,.96),rgba(86,59,121,.88)),url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1800&q=85') center/cover;color:white;padding:52px max(22px,calc((100% - 1100px)/2));min-height:245px;display:flex;flex-direction:column;justify-content:center}
+.hero small{letter-spacing:.16em;text-transform:uppercase;color:#ded8f2;font-weight:850}.hero h1{font-family:'Playfair Display',Georgia,serif;font-size:clamp(2.7rem,6vw,4.5rem);line-height:1;margin:10px 0;letter-spacing:-.03em}.hero p{margin:0;color:#edf0fa;max-width:680px}
+.shell{max-width:1160px;margin:28px auto 60px;padding:0 18px}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:18px}
+.tab{border:1px solid #e6e2ed;border-radius:17px;padding:15px 10px;background:white;color:var(--navy);font-weight:850;cursor:pointer;box-shadow:0 7px 22px #1c30520c;transition:.2s}.tab:hover{transform:translateY(-3px);border-color:#f2a17e}
+.tab span{display:block;font-size:.72rem;color:var(--muted);font-weight:700;margin-top:2px}
+.tab.active{background:var(--navy);color:white;border-color:var(--navy)}.tab.active span{color:#e0d9f2}
+.panel{display:none;background:linear-gradient(180deg,#fff 0%,#fff 72%,#fffaf7 100%);border:1px solid #ebe7f0;border-radius:25px;padding:clamp(19px,3vw,34px);box-shadow:0 16px 42px #1c305214;min-height:480px}
+.panel.active{display:block}.tag{display:inline-block;background:var(--lav);color:var(--purple);border-radius:20px;padding:4px 10px;font-size:.7rem;font-weight:900;letter-spacing:.09em;text-transform:uppercase}
+h2{font-family:'Playfair Display',Georgia,serif;color:var(--navy);margin:8px 0 5px;font-size:clamp(1.7rem,3vw,2.25rem)}.sub{color:var(--muted);margin:0 0 18px}.starter{background:#f5f7fb;border-left:3px solid var(--orange);padding:10px 12px;border-radius:0 10px 10px 0;margin:15px 0;font-size:.9rem}.starter b{color:var(--purple)}
+.btn{border:0;border-radius:12px;padding:11px 17px;background:var(--navy);color:white;font-weight:850;cursor:pointer;margin:8px 6px 0 0;box-shadow:0 5px 12px #1c305222;transition:.18s}.btn:hover{transform:translateY(-2px);filter:brightness(1.08)}.btn.alt{background:var(--lav);color:var(--purple)}.btn.orange{background:var(--orange)}.feedback{font-size:.87rem;font-weight:800;min-height:22px;margin-top:10px}.muted{color:var(--muted)}
+/* reading */
+.read-layout{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;margin:18px 0}
+.box-choice{aspect-ratio:1/1;border:0;border-radius:17px;background:linear-gradient(145deg,#263e66,#745b91);color:white;font-size:1.8rem;font-weight:900;box-shadow:0 7px 16px #263e6628;cursor:pointer;transition:.18s}
+.box-choice:hover{transform:translateY(-3px);background:linear-gradient(145deg,#f26b38,#d94d39)}.box-choice.done{background:#eaf3ef;color:#26765a;box-shadow:none;border:1px solid #a9d2be}
+.question-area{background:#f7f8fc;border:1px solid var(--line);border-radius:17px;padding:18px;min-height:180px}
+.question-area h3{margin:0 0 12px;color:var(--navy)}.opts{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.opt{background:white;border:1px solid #dfe2eb;border-radius:11px;padding:11px;text-align:left;cursor:pointer;color:var(--ink)}.opt:hover{border-color:#a18dbb}.opt.correct{background:#edf8f1;border-color:#64a98b}.opt.wrong{background:#fff1ef;border-color:#d78b83}.opt:disabled{cursor:default}
+.score{color:var(--purple);font-size:.85rem;font-weight:850;margin-top:10px}
+/* vocab */
+.word-match{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.match-row{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:8px;border:1px solid var(--line);border-radius:12px;padding:10px}
+.match-row strong{color:var(--navy)}select,input{font:inherit}.match-row select,.sentence select,.classify select{width:100%;padding:9px;border:1px solid #d9deea;border-radius:9px;background:white;color:var(--ink)}
+.subhead{font-size:1.05rem;color:var(--purple);margin:22px 0 9px}.sentences{display:grid;gap:9px}.sentence{border:1px solid var(--line);border-radius:12px;padding:12px;display:grid;grid-template-columns:1fr 180px;gap:10px;align-items:center}
+.wordbank{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}.wordbank span{background:var(--blue);padding:5px 9px;border-radius:20px;font-size:.82rem;font-weight:800;color:var(--navy)}
+/* quantity */
+.food-sort{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}.food-token{background:white;border:1px solid #ebe6ef;border-radius:18px;padding:10px;text-align:center;box-shadow:0 8px 20px #1c30520c;overflow:hidden;transition:.2s}.food-token img{width:100%;height:112px;object-fit:cover;border-radius:12px;display:block;margin-bottom:9px}.food-token b{display:block;color:var(--navy);font-size:1rem;margin:3px 0 9px}.classify-actions{display:grid;grid-template-columns:1fr 1fr;gap:6px}.classify-btn{border:1px solid #e2e3eb;border-radius:10px;padding:8px 4px;background:#f8f8fb;color:#4b5568;font-size:.75rem;font-weight:800;cursor:pointer}.classify-btn.countable.selected{background:#dff5ed;border-color:#27a77b;color:#087653}.classify-btn.uncountable.selected{background:#eee5ff;border-color:#8861c5;color:#6034a3}.food-token.correct-card{border:2px solid #27a77b;background:#f3fcf8}.food-token.wrong-card{border:2px solid #e87963;background:#fff7f5}
+.challenge-list{display:grid;grid-template-columns:1fr 1fr;gap:10px}.challenge{border:1px solid var(--line);border-radius:12px;padding:13px;display:grid;grid-template-columns:1fr 145px;gap:9px;align-items:center}.challenge select{width:100%;padding:9px;border:1px solid #d9deea;border-radius:9px;background:white}
+.divider{border:0;border-top:1px solid var(--line);margin:24px 0}
+/* menu */
+.menu-columns{display:grid;grid-template-columns:1fr .9fr;gap:17px;align-items:start}.block{border:1px solid #ece7f0;border-radius:18px;padding:17px;margin:13px 0;background:linear-gradient(135deg,#fff,#fcfaff);box-shadow:0 6px 18px #1c305208}.block h3{margin:0 0 9px;color:var(--navy)}.field{margin:9px 0}.field label{display:block;color:var(--navy);font-weight:850;font-size:.88rem;margin-bottom:5px}.field input,.field select{width:100%;padding:11px;border:1px solid #d9deea;border-radius:9px;background:white}
+.menu-example{background:linear-gradient(100deg,rgba(28,48,82,.92),rgba(86,59,121,.78)),url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=85') center/cover;color:white;border:0;border-radius:20px;padding:20px;margin:14px 0;box-shadow:0 12px 28px #1c305225}.menu-example h3,.menu-example p,.menu-example .model-hint{color:white}.menu-example .tag{background:#fff;color:var(--purple)}.menu-example h3{color:var(--navy);margin:3px 0}.menu-example p{font-size:.88rem;margin:6px 0}.menu-example ul{margin:5px 0;padding-left:20px;font-size:.85rem}
+.preview{position:sticky;top:12px;background:#fffdf8;border:2px solid #e7d7bd;border-radius:22px;padding:22px;box-shadow:0 14px 34px #1c30521b;min-height:390px;overflow:hidden}.preview-banner{height:145px;margin:-22px -22px 18px;background:linear-gradient(0deg,rgba(28,48,82,.45),rgba(28,48,82,.05)),url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1000&q=85') center/cover}.preview h2{font: bold 2.15rem 'Playfair Display',Georgia,serif;color:#263a55;margin:5px 0}.preview h4{font: bold 1.05rem 'DM Sans',sans-serif;color:#8b5935;border-bottom:2px solid #f1dfca;padding-bottom:7px;margin:16px 0 7px;letter-spacing:.1em;text-transform:uppercase}
+.preview .over{font-size:.68rem;letter-spacing:.17em;color:#9a6b43;font-weight:900;text-transform:uppercase}.preview h2{font: bold 2rem Georgia,serif;color:#263a55;margin:5px 0}.preview .type{color:#8a725d;font-size:.8rem;text-transform:uppercase;letter-spacing:.1em}
+.preview h4{font: bold 1.05rem Georgia,serif;color:#8b5935;border-bottom:1px solid #e7d8c6;padding-bottom:5px;margin:16px 0 7px}.preview ul{padding-left:19px;margin:0}.preview li{margin:5px 0;font-size:.9rem}.preview .quantity{background:#f3eff9;border-radius:10px;padding:10px;margin-top:14px;font-size:.84rem}.model-hint{font-size:.8rem;color:var(--muted)}
+footer{text-align:center;color:var(--muted);padding:25px;font-size:.8rem}
+ 
+.preview{padding:0;background:#fffaf2;border:1px solid #eadbc7;border-radius:24px;box-shadow:0 18px 44px #1c305225;overflow:hidden}
+.preview-banner{height:190px;margin:0;background:linear-gradient(90deg,rgba(23,35,55,.58),rgba(23,35,55,.12)),url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1400&q=88') center 55%/cover;display:flex;flex-direction:column;justify-content:flex-end;padding:22px;color:white}
+.banner-kicker{font-size:.65rem;letter-spacing:.24em;font-weight:900}
+.banner-script{font:italic 1.55rem 'Playfair Display',Georgia,serif}
+.menu-paper{margin:0;padding:25px 28px 18px;background:radial-gradient(circle at top right,#fff5e7,transparent 36%),#fffdf8}
+.menu-emblem{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;margin:-47px auto 15px;position:relative;background:#f26b38;color:white;border:4px solid #fffdf8;font-size:1.1rem;box-shadow:0 3px 10px #1c305222}
+.preview .over{text-align:center;color:#a16c3f;letter-spacing:.25em;font-size:.65rem}
+.preview h2{text-align:center;font:800 clamp(1.9rem,4vw,2.7rem) 'Playfair Display',Georgia,serif;color:#243852;margin:7px 0 4px;overflow-wrap:anywhere}
+.preview .type{text-align:center;color:#9a6a43;font-size:.76rem;text-transform:uppercase;letter-spacing:.18em;font-weight:800}
+.menu-rule{display:flex;align-items:center;gap:12px;color:#e58a4b;margin:18px 0}
+.menu-rule:before,.menu-rule:after{content:"";height:1px;background:#e8d8c5;flex:1}
+.menu-columns-preview{display:grid;grid-template-columns:1.3fr 1fr;gap:22px}
+.preview h4{font:800 .78rem 'DM Sans',sans-serif;color:#c36a37;border:0;border-bottom:1px solid #eadbc8;padding-bottom:9px;margin:8px 0 10px;letter-spacing:.13em}
+.preview ul{padding:0;margin:0;list-style:none}
+.preview li{position:relative;padding:7px 0 7px 17px;margin:0;border-bottom:1px dotted #e7d9c9;font-size:.91rem;color:#35445a;line-height:1.35}
+.preview li:before{content:"✦";position:absolute;left:0;top:8px;color:#f18a4d;font-size:.68rem}
+.preview .quantity{background:#f3edf8;border:1px solid #e5d8ef;border-radius:15px;padding:14px 16px;margin-top:20px;color:#45345f;font-size:.84rem;line-height:1.7}
+.quantity-title{text-align:center;font-size:.65rem;letter-spacing:.18em;font-weight:900;color:#76549a;margin-bottom:7px}
+.menu-footer{display:flex;justify-content:center;align-items:center;gap:12px;color:#a16c43;font-size:.58rem;font-weight:900;letter-spacing:.16em;margin-top:22px}
+.preview-actions{padding:0 25px 22px;text-align:center;background:#fffdf8}
+.preview-actions .btn{background:#f26b38}
+.preview-actions .model-hint{margin:8px 0 0}
+@media(max-width:560px){.menu-columns-preview{grid-template-columns:1fr;gap:12px}.preview-banner{height:145px}.menu-paper{padding:22px 19px 16px}}
+@media print{
+ body *{visibility:hidden!important}
+ #menuPreview,#menuPreview *{visibility:visible!important}
+ #menuPreview{position:absolute!important;left:0!important;top:0!important;width:100%!important;max-width:760px!important;margin:0!important;border:0!important;box-shadow:none!important;break-inside:avoid}
+ #menuPreview .preview-actions{display:none!important}
+ .preview-banner{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+@media(max-width:760px){.menu-columns{grid-template-columns:1fr}.preview{position:static}.food-sort{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:560px){.tabs{grid-template-columns:repeat(2,1fr)}.read-layout{grid-template-columns:repeat(4,1fr)}.opts{grid-template-columns:1fr}.word-match,.challenge-list{grid-template-columns:1fr}.sentence,.challenge{grid-template-columns:1fr}.food-sort{grid-template-columns:repeat(2,1fr)}.panel{min-height:0}}
+@media print{body *{visibility:hidden}.preview,.preview *{visibility:visible}.preview{position:absolute;left:0;top:0;width:100%;box-shadow:none}}
+</style></head>
+<body>
+<header class="hero"><small>Progress 1 · Unit 5</small><h1>The Business of Food</h1><p>Explore food, discover useful language and create a restaurant menu with your team.</p></header>
+<main class="shell">
+<div class="tabs" role="tablist" aria-label="Activities">
+<button class="tab active" data-tab="reading">01 · Reading Detectives<span>Open the secret boxes</span></button>
+<button class="tab" data-tab="vocab">02 · Food Vocabulary<span>Match & complete</span></button>
+<button class="tab" data-tab="quantity">03 · Quantity Challenge<span>Sort & choose</span></button>
+<button class="tab" data-tab="menu">04 · Menu Generator<span>Create your menu</span></button>
+</div>
+
+<section class="panel active" id="reading">
+<span class="tag">Activity 1 · Reading</span><h2>Reading Detectives: Open the Box!</h2>
+<p class="sub">Seven secret boxes are waiting for you. Choose a box to reveal its question. Answer together with your team!</p>
+<div class="read-layout" id="boxButtons"></div>
+<div class="question-area" id="questionArea"><h3>🔐 Choose a secret box!</h3><p class="muted">The question and answer options will appear here when you open a box.</p></div>
+<div class="score" id="readScore">Correct answers: 0 / 7</div>
+<div class="starter"><b>Useful language:</b> “I think the answer is ___ because the text says ___.” · “I found this information in the text.”</div>
+</section>
+
+<section class="panel" id="vocab">
+<span class="tag">Activity 2 · Vocabulary</span><h2>Food Vocabulary Challenge</h2><p class="sub">First, match each word with its meaning. Then use the words to complete the sentences.</p>
+<h3 class="subhead">Part A · Match the word and the definition</h3>
+<div class="word-match" id="wordMatch"></div>
+<button class="btn" onclick="checkMatch()">Check matching</button><div class="feedback" id="matchFeedback"></div>
+<hr class="divider">
+<h3 class="subhead">Part B · Complete the sentences</h3><p class="muted">Choose the correct word from the vocabulary list.</p>
+<div class="wordbank"><span>ingredients</span><span>franchise</span><span>fusion</span><span>logo</span><span>power</span></div>
+<div class="sentences" id="vocabSentences"></div>
+<button class="btn" onclick="checkSentences()">Check sentences</button><button class="btn alt" onclick="resetSentences()">Try again</button><div class="feedback" id="sentenceFeedback"></div>
+<div class="starter"><b>Useful language:</b> “I matched ___ with ___.” · “I chose ___ because it means ___.”</div>
+</section>
+
+<section class="panel" id="quantity">
+<span class="tag">Activity 3 · Food sorting & grammar</span><h2>Quantity Challenge</h2><p class="sub">Part A: classify the food. Part B: choose the correct quantity expression.</p>
+<h3 class="subhead">Part A · Countable or uncountable?</h3><p class="muted">Look at each food photo. Then tap COUNTABLE or UNCOUNTABLE. Your card will change colour to show your choice.</p>
+<div class="food-sort" id="foodSort"></div><button class="btn" onclick="checkSort()">Check classification</button><div class="feedback" id="sortFeedback"></div>
+<hr class="divider">
+<h3 class="subhead">Part B · Choose the correct expression</h3>
+<div class="challenge-list" id="quantityQuestions"></div><button class="btn" onclick="checkQuantity()">Check answers</button><button class="btn alt" onclick="resetQuantity()">Try again</button><div class="feedback" id="quantityFeedback"></div>
+<div class="starter"><b>Remember:</b> How many + countable plural · How much + uncountable · A lot of + both.</div>
+</section>
+
+<section class="panel" id="menu">
+<span class="tag">Activity 4 · Team challenge</span><h2>Menu Generator</h2><p class="sub">Imagine you are opening a restaurant. Decide what kind of food you want to serve and create a menu that looks like a real restaurant menu.</p>
+<div class="menu-example"><span class="tag">Class example · Canadian restaurant</span><h3>🍁 Maple & North</h3><p><b>Type:</b> Canadian food</p><p><b>Example dishes:</b> Poutine · Tourtière · Montreal smoked meat sandwich · Maple-glazed salmon · Butter tarts</p><p><b>Example drinks:</b> Maple latte · Iced tea · Lemonade</p><p class="model-hint">This is just an example to give you ideas. Your team can choose any country or style of food.</p></div>
+<div class="menu-columns"><div>
+<div class="block"><h3>Step 1 · Your restaurant</h3><div class="field"><label for="restaurantName">1. Restaurant name</label><input id="restaurantName" placeholder="Write your restaurant name"></div><div class="field"><label for="restaurantType">2. Type of food</label><select id="restaurantType"><option value="">Choose a type…</option><option>Colombian food</option><option>Chinese food</option><option>Italian food</option><option>Mexican food</option><option>Japanese food</option><option>Canadian food</option><option>International food</option><option>Fusion food</option><option>Other</option></select></div><div class="starter"><b>Sentence starters:</b> “Our restaurant is called ___.” · “We serve ___ food.”</div></div>
+<div class="block"><h3>Step 2 · Choose your five dishes</h3><p class="model-hint">Research real dishes from your chosen country or food style. Write their names in English. You must include <b>exactly five dishes</b>.</p>
+<div class="field"><label for="dish1">Dish 1</label><input class="dish-input" id="dish1" placeholder="Example: Poutine"></div><div class="field"><label for="dish2">Dish 2</label><input class="dish-input" id="dish2" placeholder="Write a real dish in English"></div><div class="field"><label for="dish3">Dish 3</label><input class="dish-input" id="dish3" placeholder="Write a real dish in English"></div><div class="field"><label for="dish4">Dish 4</label><input class="dish-input" id="dish4" placeholder="Write a real dish in English"></div><div class="field"><label for="dish5">Dish 5</label><input class="dish-input" id="dish5" placeholder="Write a real dish in English"></div>
+<div class="starter"><b>Sentence starters:</b> “We have ___.” · “Our special dishes are ___ and ___.”</div></div>
+<div class="block"><h3>Step 3 · Choose three drinks</h3><p class="model-hint">Write three drinks for your menu.</p><div class="field"><label for="drink1">Drink 1</label><input class="drink-input" id="drink1" placeholder="Example: Lemonade"></div><div class="field"><label for="drink2">Drink 2</label><input class="drink-input" id="drink2" placeholder="Write a drink in English"></div><div class="field"><label for="drink3">Drink 3</label><input class="drink-input" id="drink3" placeholder="Write a drink in English"></div>
+<div class="starter"><b>Sentence starters:</b> “We offer ___.” · “You can drink ___.”</div></div>
+<div class="block"><h3>Step 4 · Ingredients and quantities</h3><p class="model-hint">Decide what ingredients your restaurant needs. Use the examples to help you.</p><div class="field"><label for="manyQ">How many…?</label><input id="manyQ" placeholder="Example: How many tomatoes do we need?"></div><div class="field"><label for="manyA">Our answer</label><input id="manyA" placeholder="Example: We need a lot of tomatoes."></div><div class="field"><label for="muchQ">How much…?</label><input id="muchQ" placeholder="Example: How much rice do we need?"></div><div class="field"><label for="muchA">Our answer</label><input id="muchA" placeholder="Example: We need a lot of rice."></div><div class="starter"><b>Remember:</b> How many + countable plural · How much + uncountable · A lot of + both.</div></div>
+<button class="btn orange" onclick="generateMenu()">Generate our restaurant menu</button><button class="btn alt" onclick="clearMenu()">Clear form</button>
+</div>
+<aside class="preview" id="menuPreview">
+<div class="preview-banner"><span class="banner-kicker">A PLACE AT THE TABLE</span><span class="banner-script">Good food. Good mood.</span></div>
+<div class="menu-paper">
+<div class="menu-emblem">✦</div><div class="over">WELCOME TO</div><h2 id="previewName">Your Restaurant</h2><div class="type" id="previewType">Your food style</div>
+<div class="menu-rule"><span>✦</span></div>
+<div class="menu-columns-preview">
+<section><h4>FROM OUR KITCHEN</h4><ul id="previewDishes"><li>Your five dishes will appear here.</li></ul></section>
+<section><h4>DRINKS & REFRESHMENTS</h4><ul id="previewDrinks"><li>Your three drinks will appear here.</li></ul></section>
+</div>
+<div class="quantity"><div class="quantity-title">BEHIND THE MENU</div><div id="previewQuantity">Your ingredient questions and answers will appear here.</div></div>
+<div class="menu-footer"><span>MADE WITH LOVE</span><span>✦</span><span>THANK YOU FOR VISITING</span></div>
+</div>
+<div class="preview-actions"><button class="btn" onclick="window.print()">Print / Save menu</button><p class="model-hint">Take a screenshot of your menu and share it with the class.</p></div>
+</aside></div>
+</section>
+</main><footer>Progress 1 · Unit 5: The Business of Food</footer>
+<script>
+const tabs=[...document.querySelectorAll('.tab')];tabs.forEach(t=>t.addEventListener('click',()=>{tabs.forEach(x=>x.classList.toggle('active',x===t));document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id===t.dataset.tab));window.scrollTo({top:0,behavior:'smooth'})}));
+const reading=[
+["Which country is Gastón Acurio from?",["Peru","Canada","Italy"],0,"The text introduces Gastón as a Peruvian chef."],
+["Who is Astrid?",["His restaurant customer","His wife and business partner","A food critic"],1,"The reading identifies Astrid as his wife and business partner."],
+["What makes his food special?",["Only European recipes","A fusion of European cooking and traditional South American ingredients","Only fast food"],1,"The text describes a fusion of European cooking and traditional South American ingredients."],
+["Are there traditional Peruvian dishes on his menus?",["Yes, there are many","No, there aren't any","The text doesn't mention food"],0,"The reading says there are a lot of traditional Peruvian dishes on his menus."],
+["What does “Cocina NovoAndina” refer to?",["A new Andean style of cooking","A Canadian restaurant chain","A type of coffee"],0,"The reading presents it as new Andean cooking."],
+["What is a franchise?",["A cooking ingredient","A business arrangement that lets someone use a company's name","A restaurant logo"],1,"A franchise gives someone the right to sell a product using a company's name."],
+["What does the reading mention besides Gastón's own restaurants?",["International restaurant chains","Canadian desserts","A guide to growing potatoes"],0,"The reading mentions international restaurant chains."]
+];
+let opened={},readCorrect=0;const boxBtns=document.getElementById('boxButtons'),area=document.getElementById('questionArea');
+reading.forEach((q,i)=>{let b=document.createElement('button');b.className='box-choice';b.textContent='?';b.setAttribute('aria-label',`Open secret box ${i+1}`);b.onclick=()=>showQuestion(i);boxBtns.appendChild(b)});
+function showQuestion(i){if(opened[i])return;let q=reading[i];area.innerHTML=`<h3>📦 Box ${i+1}: ${q[0]}</h3><div class="opts">${q[1].map((x,j)=>`<button class="opt" data-read="${j}">${'ABC'[j]}. ${x}</button>`).join('')}</div><div class="feedback" id="readFeedback"></div>`;
+area.querySelectorAll('[data-read]').forEach(b=>b.onclick=()=>{if(opened[i])return;opened[i]=true;let ok=+b.dataset.read===q[2];if(ok)readCorrect++;area.querySelectorAll('[data-read]').forEach(x=>{x.disabled=true;if(+x.dataset.read===q[2])x.classList.add('correct')});if(!ok)b.classList.add('wrong');document.getElementById('readFeedback').textContent=(ok?'Correct! ':'Not quite. ')+q[3];boxBtns.children[i].textContent=ok?'✓':'↻';boxBtns.children[i].classList.add('done');document.getElementById('readScore').textContent=`Correct answers: ${readCorrect} / 7`;});}
+const definitions=[["ingredients","Things used to prepare or make food."],["franchise","The right to sell a product or service using a company's name."],["fusion","A combination of different styles or traditions."],["logo","A symbol or design that represents a company."],["power","The ability or influence to make something happen."]];
+const defOptions=[...definitions.map(x=>x[1]),"A list of prices in a restaurant.","A person who prepares food."];
+const wm=document.getElementById('wordMatch');definitions.forEach((x,i)=>{let d=document.createElement('div');d.className='match-row';d.innerHTML=`<strong>${x[0]}</strong><select data-match="${i}"><option value="">Choose a definition…</option>${defOptions.map((v,j)=>`<option value="${j}">${v}</option>`).join('')}</select>`;wm.appendChild(d)});
+function checkMatch(){let n=0;document.querySelectorAll('[data-match]').forEach(s=>{let ok=+s.value===+s.dataset.match;if(s.value!==''&&ok)n++;s.style.borderColor=ok?'#63a98b':s.value?'#d78b83':''});document.getElementById('matchFeedback').textContent=`Correct matches: ${n} / 5. ${n===5?'Excellent matching!':'Check the meanings and try again.'}`}
+const sent=[["Potatoes and carrots are common ___ in Europe.","ingredients"],["A ___ gives someone the right to sell a product using a company's name.","franchise"],["Corsican food is a ___ of French and Italian food.","fusion"],["The best restaurants use good quality ___.","ingredients"],["The letter M is the ___ of a famous American fast food restaurant.","logo"],["Famous chefs have the ___ to make people choose different foods.","power"]];
+const vs=document.getElementById('vocabSentences');sent.forEach((x,i)=>{let d=document.createElement('div');d.className='sentence';d.innerHTML=`<span>${i+1}. ${x[0]}</span><select data-sent="${i}"><option value="">Choose a word…</option>${definitions.map(y=>`<option>${y[0]}</option>`).join('')}</select>`;vs.appendChild(d)});
+function checkSentences(){let n=0;document.querySelectorAll('[data-sent]').forEach(s=>{let ok=s.value===sent[+s.dataset.sent][1];if(ok)n++;s.style.borderColor=ok?'#63a98b':s.value?'#d78b83':''});document.getElementById('sentenceFeedback').textContent=`Correct sentences: ${n} / 6. ${n===6?'Great work!':'Review the vocabulary and try again.'}`}
+function resetSentences(){document.querySelectorAll('[data-sent]').forEach(s=>{s.value='';s.style.borderColor=''});document.getElementById('sentenceFeedback').textContent=''}
+const foods=[["apples","Countable"],["rice","Uncountable"],["eggs","Countable"],["cheese","Uncountable"],["tomatoes","Countable"],["milk","Uncountable"],["bananas","Countable"],["juice","Uncountable"],["tacos","Countable"],["coffee","Uncountable"]];
+const foodPhotos=[
+'https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?auto=format&fit=crop&w=500&q=80',
+'https://images.unsplash.com/photo-1516684732162-798a0062be99?auto=format&fit=crop&w=500&q=80',
+'https://images.unsplash.com/photo-1518569656558-1f25e69d93d7?auto=format&fit=crop&w=500&q=80',
+'https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?auto=format&fit=crop&w=500&q=80',
+'https://images.unsplash.com/photo-1546094096-0df4bcaaa337?auto=format&fit=crop&w=500&q=80',
+'https://images.unsplash.com/photo-1563636619-e9143da7973b?auto=format&fit=crop&w=500&q=80',
+'https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?auto=format&fit=crop&w=500&q=80',
+'https://images.unsplash.com/photo-1600271886742-f049cd451bba?auto=format&fit=crop&w=500&q=80',
+'https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=500&q=80',
+'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=500&q=80'
+];
+const fs=document.getElementById('foodSort');foods.forEach((x,i)=>{let d=document.createElement('div');d.className='food-token';d.dataset.card=i;d.innerHTML=`<img src="${foodPhotos[i]}" alt="${x[0]}" loading="lazy" onerror="this.style.display='none'"><b>${x[0]}</b><div class="classify-actions"><button type="button" class="classify-btn countable" data-food="${i}" data-value="Countable">Countable</button><button type="button" class="classify-btn uncountable" data-food="${i}" data-value="Uncountable">Uncountable</button></div>`;fs.appendChild(d)});
+document.querySelectorAll('[data-food]').forEach(b=>b.addEventListener('click',()=>{let i=+b.dataset.food;document.querySelectorAll(`[data-food="${i}"]`).forEach(x=>x.classList.toggle('selected',x===b));let card=fs.querySelector(`[data-card="${i}"]`);card.dataset.answer=b.dataset.value;card.classList.remove('correct-card','wrong-card')}));
+function checkSort(){let n=0;foods.forEach((x,i)=>{let card=fs.querySelector(`[data-card="${i}"]`),answer=card.dataset.answer||'';let ok=answer===x[1];if(ok)n++;card.classList.toggle('correct-card',!!answer&&ok);card.classList.toggle('wrong-card',!!answer&&!ok)});document.getElementById('sortFeedback').textContent=`Correct classifications: ${n} / 10. ${n===10?'Perfect!':'Choose a category for each food and try again.'}`}
+const quantities=[
+["How ___ bananas do we need?",["much","many"],"many"],
+["How ___ cheese is there?",["much","many"],"much"],
+["We need ___ tomatoes. (a lot of / much)",["a lot of","much"],"a lot of"],
+["We don't need ___ rice. (many / much)",["many","much"],"much"],
+["How ___ coffee do we need?",["much","many"],"much"],
+["We need ___ eggs. (a lot of / much)",["a lot of","much"],"a lot of"],
+["How ___ tacos are there?",["much","many"],"many"],
+["We don't need ___ apples. (many / much)",["many","much"],"many"]
+];
+const qq=document.getElementById('quantityQuestions');quantities.forEach((q,i)=>{let d=document.createElement('div');d.className='challenge';d.innerHTML=`<span>${i+1}. ${q[0]}</span><select data-quantity="${i}"><option value="">Choose…</option>${q[1].map(v=>`<option>${v}</option>`).join('')}</select>`;qq.appendChild(d)});
+function checkQuantity(){let n=0;document.querySelectorAll('[data-quantity]').forEach(s=>{let ok=s.value===quantities[+s.dataset.quantity][2];if(ok)n++;s.style.borderColor=ok?'#63a98b':s.value?'#d78b83':''});document.getElementById('quantityFeedback').textContent=`Correct answers: ${n} / 8. ${n===8?'Fantastic!':'Check the noun and the expression again.'}`}
+function resetQuantity(){document.querySelectorAll('[data-quantity]').forEach(s=>{s.value='';s.style.borderColor=''});document.getElementById('quantityFeedback').textContent=''}
+function esc(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function generateMenu(){let name=document.getElementById('restaurantName').value.trim(),type=document.getElementById('restaurantType').value,dishes=[...document.querySelectorAll('.dish-input')].map(x=>x.value.trim()),drinks=[...document.querySelectorAll('.drink-input')].map(x=>x.value.trim());if(!name||!type){alert('Please add your restaurant name and choose a type of food.');return}if(dishes.some(x=>!x)){alert('Please complete all five dishes.');return}if(drinks.some(x=>!x)){alert('Please complete all three drinks.');return}document.getElementById('previewName').textContent=name;document.getElementById('previewType').textContent=type;document.getElementById('previewDishes').innerHTML=dishes.map(x=>`<li>${esc(x)}</li>`).join('');document.getElementById('previewDrinks').innerHTML=drinks.map(x=>`<li>${esc(x)}</li>`).join('');let many=document.getElementById('manyQ').value.trim(),manyA=document.getElementById('manyA').value.trim(),much=document.getElementById('muchQ').value.trim(),muchA=document.getElementById('muchA').value.trim();let lines=[];if(many)lines.push(`<div><b>${esc(many)}</b></div>`);if(manyA)lines.push(`<div>${esc(manyA)}</div>`);if(much)lines.push(`<div style="margin-top:8px"><b>${esc(much)}</b></div>`);if(muchA)lines.push(`<div>${esc(muchA)}</div>`);document.getElementById('previewQuantity').innerHTML=lines.length?lines.join(''):'Add your ingredient questions and quantities.';document.getElementById('menuPreview').scrollIntoView({behavior:'smooth',block:'center'})}
+function clearMenu(){document.querySelectorAll('#menu input').forEach(x=>x.value='');document.getElementById('restaurantType').value='';document.getElementById('previewName').textContent='Your Restaurant';document.getElementById('previewType').textContent='Your food style';document.getElementById('previewDishes').innerHTML='<li>Your five dishes will appear here.</li>';document.getElementById('previewDrinks').innerHTML='<li>Your three drinks will appear here.</li>';document.getElementById('previewQuantity').textContent='Your ingredient quantities will appear here.'}
+</script></body></html>
